@@ -9,8 +9,8 @@ let winSound = new Audio('./sounds/win-sound.mp3')
 
 let playerName1 = document.getElementById('player1Name')
 let playerName2 = document.getElementById('player2Name')
-let namePrompt1 = prompt('Give Player name first')
-let namePrompt2 = prompt('Give Player name second')
+let namePrompt1 = prompt('Enter first player name')
+let namePrompt2 = prompt('Enter second player name')
 playerName1.textContent = namePrompt1
 playerName2.textContent = namePrompt2
 
