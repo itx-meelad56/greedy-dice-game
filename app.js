@@ -7,6 +7,12 @@ let player2TotalScoreUI = document.getElementById('player2TotalScoreUI')
 let diceSound = new Audio('./sounds/dice-sound.mp3');
 let winSound = new Audio('./sounds/win-sound.mp3')
 
+let raw = localStorage.getItem('storeWins');
+
+let storeWins = raw ? JSON.parse(raw) : [];
+
+let modal = document.getElementById('modal')
+
 let playerName1 = document.getElementById('player1Name')
 let playerName2 = document.getElementById('player2Name')
 let namePrompt1 = prompt('Enter first player name')
@@ -91,9 +97,15 @@ holdDice.addEventListener('click', () => {
         player1.classList.toggle('active')
         player2.classList.toggle('active')
 
-        if (player1TotalScore >= 100) {
+        if (player1TotalScore >= 15) {
             winSound.play()
             alert(`You Winner the Game ${playerName1.textContent}`)
+            storeWins.push({
+                winner: namePrompt1,
+                loser: namePrompt2,
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('storeWins', JSON.stringify(storeWins));
             player1CurrentScore = 0
             player1CurrentScoreUI.textContent = player1CurrentScore
             player1TotalScore = 0
@@ -112,9 +124,16 @@ holdDice.addEventListener('click', () => {
         player1Turn = true
         player1.classList.toggle('active')
         player2.classList.toggle('active')
-        if (player2TotalScore >= 100) {
+        if (player2TotalScore >= 15) {
             winSound.play()
             alert(`You Winner the Game ${playerName2.textContent}`)
+            storeWins.push({
+                winner: namePrompt2,
+                loser: namePrompt1,
+                time: new Date().toLocaleString()
+            });
+            localStorage.setItem('storeWins', JSON.stringify(storeWins));
+
             player2CurrentScore = 0
             player2CurrentScoreUI.textContent = player2CurrentScore
             player2TotalScore = 0
@@ -158,4 +177,28 @@ resetButton.addEventListener('click', () => {
     }
     player1.classList.add('active')
     player2.classList.remove('active')
+})
+
+
+let leaderBoard = document.getElementById('leaderBoard')
+let modalLeaderBoard = document.getElementById('modal-leaderBoard')
+
+let modalBand = document.getElementById('modalBand')
+
+leaderBoard.addEventListener('click', () => {
+    let ul = document.getElementById('ul')
+    ul.innerHTML = ''
+    storeWins.forEach((winData) => {
+        let li = document.createElement('li')
+        li.textContent = `${winData.winner}  won against ${winData.loser}`
+         ul.appendChild(li)
+    });
+    modalLeaderBoard.style.display = 'flex'
+    modal.classList.toggle("show");
+})
+
+
+modalBand.addEventListener('click', () => {
+     modalLeaderBoard.style.display = 'none'
+    modal.classList.toggle("show");
 })
